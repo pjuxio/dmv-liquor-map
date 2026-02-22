@@ -15,7 +15,9 @@ async function seed() {
   const stores = [];
   const csvPath = path.join(__dirname, '..', 'source', 'dmv_merged.csv');
   
-  // Read CSV file
+  // Read CSV file and dedupe by place_id
+  const seenPlaceIds = new Set();
+  
   await new Promise((resolve, reject) => {
     fs.createReadStream(csvPath)
       .pipe(csv())
@@ -25,6 +27,10 @@ async function seed() {
         
         // Skip rows with invalid coordinates
         if (isNaN(lat) || isNaN(lng)) return;
+        
+        // Skip duplicate place_ids
+        if (seenPlaceIds.has(row.place_id)) return;
+        seenPlaceIds.add(row.place_id);
         
         stores.push({
           place_id: row.place_id,
