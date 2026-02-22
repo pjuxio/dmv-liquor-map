@@ -216,7 +216,7 @@
     let _resolveStores;
     const storePointsPromise = new Promise(resolve => { _resolveStores = resolve; });
 
-    Papa.parse('source/liquor_stores_clean.csv', {
+    Papa.parse('source/dmv_merged.csv', {
       download: true,
       header: true,
       skipEmptyLines: true,
